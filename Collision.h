@@ -4,28 +4,29 @@
 #include "Ball.h"
 #include "Block.h"
 
-template<class T1, class T2> bool isIntersecting(const T1& a, const T2& b)
+template<class T1, class T2> bool rectCollision(const T1& a, const T2& b)
 {
-	return a.right() > b.left()
-		&& a.left() < b.right()
-		&& a.bottom() > b.top()
-		&& a.top() < b.bottom();
+	return !(b.left() >= a.right() || b.right() <= a.left() || b.top() >= a.bottom() || b.bottom() <= a.top());
 }
 
 void checkPaddleBallCollision(Paddle& paddle, Ball& ball)
 {
-	if (!isIntersecting(paddle, ball)) return;
+	if (!rectCollision(paddle, ball)) return;
 	if (ball.bottom() >= paddle.top())
 	{
-		ball.setVelocity({ ball.getVelocity().x, ball.getVelocity().y * -1 });
-		if (ball.x() < paddle.x())
-			ball.setVelocity({ ball.getVelocity().x * -1, ball.getVelocity().y });
+		auto ballVelocity = ball.getVelocity();
+		auto paddleVelocity = paddle.getVelocity();
+		float ballMaxVelocity = ball.getMaxVelocity();
+		float sumX = ballVelocity.x + paddleVelocity.x;
+		float newXVelocity = (abs(sumX) <= ballMaxVelocity) ? sumX : ballMaxVelocity;
+		newXVelocity = (abs(newXVelocity) >= 0.25f) ? newXVelocity : ((newXVelocity > 0) ? newXVelocity + 0.15f : newXVelocity - 0.15f);
+		ball.setVelocity({ newXVelocity, ballVelocity.y * -1 });
 	}
 }
 
 void checkBlockBallCollision(Block& block, Ball& ball)
 {
-	if (!isIntersecting(block, ball))
+	if (!rectCollision(block, ball))
 		return;
 
 	block.setRequiredHits(block.getRequiredHits() - 1);

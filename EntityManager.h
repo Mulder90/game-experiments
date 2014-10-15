@@ -17,7 +17,7 @@ public:
 		auto uPtr(std::make_unique<T>(std::forward<TArgs>(args)...));
 		auto ptr(uPtr.get());
 		m_groupEntities[typeid(T).hash_code()].emplace_back(ptr);
-		m_entities.emplace_back(move(uPtr));
+		m_entities.emplace_back(std::move(uPtr));
 		return *ptr;
 	}
 

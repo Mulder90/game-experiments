@@ -14,12 +14,12 @@ class PlayState : public GameState
 public:
 	void init(Game* game)
 	{
-		const unsigned int windowWidth = game->getWindow().getSize().x;
-		const unsigned int windowHeight = game->getWindow().getSize().y;
+		auto windowWidth = game->getWindow().getSize().x;
+		auto windowHeight = game->getWindow().getSize().y;
 		sf::Vector2f blockSize{ 60.f, 20.f };
-		const int countBlocksX = 11, countBlocksY = 4;
-		const int margin = 3;
-		const float padding = ((windowWidth - ((blockSize.x + margin) * countBlocksX)) / 2.f) - blockSize.x / 2.f;
+		auto countBlocksX = 11, countBlocksY = 4;
+		auto margin = 3;
+		auto padding = ((windowWidth - ((blockSize.x + margin) * countBlocksX)) / 2.f) - blockSize.x / 2.f;
 
 		m_entityManager.clear();
 		for (int i = 1; i <= countBlocksX; ++i)
